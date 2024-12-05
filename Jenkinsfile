@@ -108,17 +108,18 @@
 //      }  
 // }
 // }
+
 pipeline {
     agent {
         node {
-            label 'maven-slave'
+            label 'maven-slave'  // Ensure the correct agent is being used
         }
     }
 
-environment {
-    PATH = "/opt/apache-maven-3.9.2/bin:$PATH"
-}
-
+    environment {
+        // Update PATH to include Maven installation path
+        PATH = "/opt/apache-maven-3.9.9/bin:$PATH"
+    }
 
     stages {
         stage('Clone-code') {
@@ -127,9 +128,16 @@ environment {
             }
         }
 
+        stage('Check PATH') {
+            steps {
+                sh 'echo $PATH'  // Check if the correct PATH is set
+            }
+        }
+
+
         stage('BUILD') {
             steps {
-                sh 'mvn clean deploy'
+                sh 'mvn clean deploy'  // Run Maven build
             }
         }
     }
