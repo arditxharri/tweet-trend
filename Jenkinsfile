@@ -112,7 +112,11 @@ pipeline {
     agent {
         node {
             label 'maven-slave'
-            }
+        }
+    }
+
+    environment {
+        PATH = "/opt/apache-maven-3.9.2/bin:$PATH"
     }
 
     stages {
@@ -121,17 +125,11 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/arditxharri/tweet-trend.git'
             }
         }
+
+        stage('BUILD') {
+            steps {
+                sh 'mvn clean deploy'
+            }
+        }
     }
-
-  environment {
-      PATH = "/opt/apache-maven-3.9.2/bin:$PATH"  
-}
-
-    stages {
-      stage('BUILD') {
-          steps{
-            sh 'mvn clean deploy'
-          }
-      }
-}
 }
